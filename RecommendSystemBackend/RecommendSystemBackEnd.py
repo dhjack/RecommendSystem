@@ -5,6 +5,7 @@ from JServer import JRequestHandler, JServer
 import threading
 import struct
 from BayesEngine import BayesEngine
+from ALSEngine import ALSEngine, read_data
 import MySQLdb
 
 class RSHandler(JRequestHandler):
@@ -64,7 +65,13 @@ if __name__ == "__main__":
     user = "root"
     passwd = "123456"
 
-    engine = BayesEngine(getUserBehavior(host, user, passwd))
+    engine = None
+    etype = 2
+    if etype == 1:
+        engine = BayesEngine(getUserBehavior(host, user, passwd))
+    else:
+        df, plays = read_data()
+        engine = ALSEngine(df, plays)
 
     HOST, PORT = "localhost", 9998
 

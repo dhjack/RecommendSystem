@@ -1,12 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import sys
 from JServer import JRequestHandler, JServer 
 import threading
 import struct
 from BayesEngine import BayesEngine
 from ALSEngine import ALSEngine, read_data
+from LSIEngine import LSIEngine, readItemInfos
 import MySQLdb
+import Config
 
 class RSHandler(JRequestHandler):
     '''
@@ -61,21 +64,23 @@ def saveUserRealTimeAction(action, user, pid):
         #print realTimeActions[user]
 
 if __name__ == "__main__":
-    host = "localhost"
-    user = "root"
-    passwd = "123456"
+
+    Config.init("./rs.conf")
 
     engine = None
-    etype = 2
-    if etype == 1:
-        engine = BayesEngine(getUserBehavior(host, user, passwd))
-    else:
-        df, plays = read_data()
+    etype = Config.engineName()
+    if etype == "bayes":
+        engine = BayesEngine(getUserBehavior(Config.host(), Config.user(), Config.passwd()))
+    elif etype == "als":
+        df, plays = read_data(Config.host(), Config.user(), Config.passwd())
         engine = ALSEngine(df, plays)
-
-    HOST, PORT = "localhost", 9998
+    elif etype == "lsi":
+        engine = LSIEngine(readItemInfos(Config.host(), Config.user(), Config.passwd()))
+    else:
+        print "unknow engine:", etype
+        sys.exit(1)
 
     realTimeActions = {}
     lock = threading.Lock()
 
-    JServer().start(HOST, PORT, RSHandler)
+    JServer().start(Config.engineHost(), Config.enginePort(), RSHandler)

@@ -8,11 +8,7 @@ import MySQLdb
 import random
 import struct
 import socket
-
-host = "localhost"
-user = "root"
-passwd = "XW@mysql951.32"
-port = 9998
+import Config
 
 from RecommendSystemWeb import app
 
@@ -30,7 +26,7 @@ def packResponseJson(item):
     '''
     根据节目id，查询节目信息，并生成json数据返回页面
     '''
-    db = MySQLdb.connect(host, user, passwd, "reSystem", charset="utf8")
+    db = MySQLdb.connect(Config.host(), Config.user(), Config.passwd(), "reSystem", charset="utf8")
     cursor = db.cursor()      
     cursor.execute("select info from moviesJsonInfo where pid = %d" % item)
     data = cursor.fetchall()
@@ -59,7 +55,7 @@ def communicationWithRSBackend(packet):
     会得到一个节目id，或者状态码
     '''
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(("localhost", port))
+    sock.connect((Config.engineHost(), Config.enginePort()))
     r = 0
     try:
         sock.sendall(packet)

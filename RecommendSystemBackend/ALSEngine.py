@@ -7,10 +7,6 @@ import numpy as np
 from implicit.als import AlternatingLeastSquares
 import MySQLdb
 
-host = "localhost"
-user = "root"
-passwd = "123456"
-
 class ALSEngine():
 
     def __init__(self, df, behaviors, factors=50, regularization=0.01,
@@ -27,6 +23,7 @@ class ALSEngine():
         self.indexToRealId = dict(enumerate(df['artist'].cat.categories))
         self.realIdToIndex = dict((v,k) for k,v in self.indexToRealId.iteritems())
         self._item_norms = None
+        print "init finish"
 
     @property
     def item_norms(self):
@@ -64,10 +61,7 @@ class ALSEngine():
         best = np.argpartition(scores, -N)[-N:]
         return sorted(best, key=lambda x: -scores[x])
 
-def read_data():
-    host = "localhost"
-    user = "root"
-    passwd = "XW@mysql951.32"
+def read_data(host, user, passwd):
     db = MySQLdb.connect(host, user, passwd, "reSystem", charset="utf8")
 
     sql="select uid as user, pid as artist, rate * 30 as plays from userRates"

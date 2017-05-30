@@ -4,10 +4,6 @@
 import MySQLdb
 import random
 
-host = "localhost"
-user = "root"
-passwd = "123456"
-
 class BayesEngine():
     '''
     P (喜欢节目A|用户看过了节目a,b,c) = P (用户看过的节目a,b,c|喜欢节目A) * P (喜欢节目A) / P (用户看过节目a,b,c)
@@ -23,6 +19,7 @@ class BayesEngine():
         pidInfo: (pid, (set[favorite item], set[unfavorite item]))
         '''
         self.uidInfo, self.pidInfo = self.storeBehavior(behaviors)
+        print "init finish"
 
     def storeBehavior(self, data):
         uidInfo = {}

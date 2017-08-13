@@ -7,6 +7,6 @@
 
 2017-8-13 09:21:51
 ---
-拆分为两个模块
-[推荐引擎](https://github.com/dhjack/RecommendSystemEngines)
-[推荐前端页面](https://github.com/dhjack/RecommendSystemWebsite)
+拆分为两个模块：
+1. [推荐引擎](https://github.com/dhjack/RecommendSystemEngines)
+2. [推荐前端页面](https://github.com/dhjack/RecommendSystemWebsite)
